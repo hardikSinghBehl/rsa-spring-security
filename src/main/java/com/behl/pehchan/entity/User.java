@@ -34,6 +34,9 @@ public class User implements Serializable {
 	@Column(name = "full_name", nullable = false)
 	private String name;
 
+	@Column(name = "public_key", nullable = false)
+	private byte[] publicKey;
+
 	@Column(name = "created_at", nullable = false, insertable = false)
 	private LocalDateTime createdAt;
 
