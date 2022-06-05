@@ -26,7 +26,7 @@ public class CustomUserDetailService implements UserDetailsService {
 	}
 
 	private User convert(com.behl.pehchan.entity.User user) {
-		return new User(user.getEmailId(), null, List.of());
+		return new User(user.getEmailId(), user.getId().toString(), List.of());
 	}
 
 }
