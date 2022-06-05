@@ -1,6 +1,5 @@
 package com.behl.pehchan.controller;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -37,9 +36,9 @@ public class AuthenticationController {
 	public ResponseEntity<InputStreamResource> create(
 			@RequestBody(required = true) final UserAccountCreationRequestDto userAccountCreationRequestDto) {
 		final var privateKey = userService.create(userAccountCreationRequestDto);
-		final var objectContent = new InputStreamResource(new ByteArrayInputStream(privateKey.getEncoded()));
+		final var objectContent = new InputStreamResource(privateKey);
 		return ResponseEntity.status(HttpStatus.OK)
-				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=private.der").body(objectContent);
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=private_key.pem").body(objectContent);
 	}
 
 	@PostMapping(value = "/login", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
