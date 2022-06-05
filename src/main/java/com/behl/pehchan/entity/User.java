@@ -37,10 +37,10 @@ public class User implements Serializable {
 	@Column(name = "public_key", nullable = false)
 	private byte[] publicKey;
 
-	@Column(name = "created_at", nullable = false, insertable = false)
+	@Column(name = "created_at", nullable = false, updatable = false)
 	private LocalDateTime createdAt;
 
-	@Column(name = "updated_at", nullable = false, insertable = false, updatable = false)
+	@Column(name = "updated_at", nullable = false)
 	private LocalDateTime updatedAt;
 
 	@PrePersist
