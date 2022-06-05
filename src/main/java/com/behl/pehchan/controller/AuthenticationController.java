@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.Map;
 
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
@@ -43,11 +44,11 @@ public class AuthenticationController {
 
 	@PostMapping(value = "/login", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(value = HttpStatus.OK)
-	public ResponseEntity<String> login(
+	public ResponseEntity<Map<String, String>> login(
 			@RequestPart(name = "privateKey", required = true) final MultipartFile privateKeyFile,
 			@RequestPart(name = "emailId", required = true) final String emailId) {
 		try {
-			return ResponseEntity.ok(userService.authenticate(emailId, privateKeyFile));
+			return ResponseEntity.ok(Map.of("JWT", userService.authenticate(emailId, privateKeyFile)));
 		} catch (final NoSuchAlgorithmException | InvalidKeySpecException | IOException exception) {
 			log.error("Exception occurred while validating key pair", exception);
 			throw new ResponseStatusException(HttpStatus.NOT_IMPLEMENTED);
