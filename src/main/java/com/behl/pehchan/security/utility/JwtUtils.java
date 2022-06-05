@@ -53,7 +53,7 @@ public class JwtUtils {
 
 	public String generateToken(final User user) {
 		Map<String, Object> claims = new HashMap<>();
-		claims.put("account_creation_timestamp", user.getCreatedAt());
+		claims.put("account_creation_timestamp", user.getCreatedAt().toString());
 		claims.put("user_id", user.getId());
 		claims.put("email_id", user.getEmailId());
 		return createToken(claims, user.getEmailId());
