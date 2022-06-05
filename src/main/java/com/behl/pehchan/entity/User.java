@@ -14,6 +14,8 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
 
 @Data
@@ -34,6 +36,7 @@ public class User implements Serializable {
 	@Column(name = "full_name", nullable = false)
 	private String name;
 
+	@JsonIgnore
 	@Column(name = "public_key", nullable = false)
 	private byte[] publicKey;
 

@@ -66,4 +66,9 @@ public class UserService {
 		return jwtUtils.generateToken(user);
 	}
 
+	public User retreiveAccountDetails(final String token) {
+		return userRepository.findById(jwtUtils.extractUserId(token))
+				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_IMPLEMENTED));
+	}
+
 }
