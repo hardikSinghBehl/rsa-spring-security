@@ -1,6 +1,9 @@
 package com.behl.pehchan.controller;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
@@ -9,14 +12,19 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.behl.pehchan.dto.UserAccountCreationRequestDto;
 import com.behl.pehchan.service.UserService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class AuthenticationController {
@@ -31,6 +39,19 @@ public class AuthenticationController {
 		final var objectContent = new InputStreamResource(new ByteArrayInputStream(privateKey.getEncoded()));
 		return ResponseEntity.status(HttpStatus.OK)
 				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=private.der").body(objectContent);
+	}
+
+	@PostMapping(value = "/login", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(value = HttpStatus.OK)
+	public ResponseEntity<String> login(
+			@RequestPart(name = "privateKey", required = true) final MultipartFile privateKeyFile,
+			@RequestPart(name = "emailId", required = true) final String emailId) {
+		try {
+			return ResponseEntity.ok(userService.authenticate(emailId, privateKeyFile));
+		} catch (final NoSuchAlgorithmException | InvalidKeySpecException | IOException exception) {
+			log.error("Exception occurred while validating key pair", exception);
+			throw new ResponseStatusException(HttpStatus.NOT_IMPLEMENTED);
+		}
 	}
 
 }
