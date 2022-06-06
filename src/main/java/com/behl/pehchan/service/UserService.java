@@ -84,6 +84,7 @@ public class UserService {
 				publicKey.getModulus()).equals(BigInteger.ONE))
 			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
 
+		FileUtility.deleteDirectory(generatedKeyPairLocationDto.getBasePath());
 		return jwtUtils.generateToken(user);
 	}
 
